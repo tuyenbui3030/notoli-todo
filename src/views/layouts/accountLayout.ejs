@@ -12,7 +12,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Dashboard - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title>Sign up - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
     <!-- CSS files -->
     <link href="./assets/css/tabler.min.css" rel="stylesheet"/>
     <link href="./assets/css/tabler-flags.min.css" rel="stylesheet"/>
@@ -20,22 +20,13 @@
     <link href="./assets/css/tabler-vendors.min.css" rel="stylesheet"/>
     <link href="./assets/css/demo.min.css" rel="stylesheet"/>
   </head>
-  <body class="antialiased">
-    <div class="page">
-      <%- include('../partials/header.ejs') %>
-
-      <%- include('../partials/navbar.ejs') %>
-      <div class="content">
-        <%- body %>
-        <%- include('../partials/footer.ejs') %>
-      </div>
+  <body class="antialiased border-top-wide border-primary d-flex flex-column">
+    <div class="flex-fill d-flex flex-column justify-content-center py-4">
+      <%- body %>
     </div>
-    <%-defineContent('modalNewTask')%>
     <!-- Libs JS -->
-    <script src="./assets/libs/apexcharts/dist/apexcharts.min.js"></script>
     <!-- Tabler Core -->
     <script src="./assets/js/tabler.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <%- script %>
   </body>
 </html>
