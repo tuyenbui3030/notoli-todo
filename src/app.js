@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
+require("express-async-errors");
+
 const { sequelize } = require("./models");
 const app = express();
 //Sử dụng để bắt request POST & GET...
@@ -22,16 +24,18 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res) => {
   res.render("home/index");
 });
-
+app.get("/err", (req, res) => {
+  throw new Error("beng beng");
+});
 app.use("/important", require("./routes/important.route"));
 app.use("/register", require("./routes/register.route"));
 
 app.use(function (req, res) {
-  res.send("404");
+  res.render("404", { layout: false });
 });
 app.use(function (err, req, res, next) {
   console.log(err.stack);
-  res.status(500).send("500");
+  res.status(500).render("500", { layout: false });
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {

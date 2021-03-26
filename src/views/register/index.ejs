@@ -2,7 +2,7 @@
   <div class="text-center mb-4">
     <a href="."><img src="./static/logo-main.svg" height="36" alt=""></a>
   </div>
-  <form class="card card-md" action="" method="POST">
+  <form class="card card-md" action="" name="formRegister" id="formRegister" method="POST">
     <div class="card-body">
       <h2 class="card-title text-center mb-4">Create new account</h2>
       <div class="mb-3">
@@ -38,6 +38,49 @@
     Already have account? <a href="login" tabindex="-1">Login</a>
   </div>
 </div>
+
+<%- contentFor('modalValidate') %>
+<div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-status bg-danger"></div>
+      <div class="modal-body text-center py-4">
+        <!-- SVG icon code with class="mb-2 text-danger icon-lg" -->
+        <h3>Notification</h3>
+        <div class="text-muted text-warning"></div>
+      </div>
+      <div class="modal-footer">
+        <div class="w-100">
+          <div class="row">
+            <div class="col">
+              <a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                Cancel
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- contentFor() %>
+
 <script>
-  
+  $("#formRegister").on("submit", function (e) {
+    e.preventDefault();
+    validate();
+  });
+  function validate() {
+    const email = $("#email").val();
+    $.getJSON(`/register/is-available?email=${email}`, function (data) {
+      console.log(data);
+      if (data === true) {
+        $("#formRegister").off("submit").submit();
+      } else {
+        $('.text-warning').text('Email already exists, please try again with another email');
+        $('#modal-report').modal('show');
+      }
+    });
+  }
 </script>

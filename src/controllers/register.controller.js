@@ -22,6 +22,21 @@ module.exports = {
     };
     const result = await users.create(user);
     console.log(result);
-    res.send(`add new user ID: ${result.id}`);
+    res.render("register/success", {
+      layout: "../views/layouts/accountLayout.ejs",
+      email: result.email,
+    });
+  },
+  available: async (req, res) => {
+    const email = await users.findAll({
+      where: {
+        email: req.query.email,
+      },
+    });
+    console.log(email);
+    if (email.length < 1) {
+      return res.json(true);
+    }
+    res.json(false);
   },
 };
