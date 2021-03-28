@@ -7,11 +7,11 @@
       <h2 class="card-title text-center mb-4">Create new account</h2>
       <div class="mb-3">
         <label class="form-label">Name</label>
-        <input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
+        <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" autofocus>
       </div>
       <div class="mb-3">
         <label class="form-label">Email address</label>
-        <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+        <input type="text" class="form-control" name="email" id="email" placeholder="Enter email">
       </div>
       <div class="mb-3">
         <label class="form-label">Password</label>
@@ -25,7 +25,7 @@
       </div>
       <div class="mb-3">
         <label class="form-check">
-          <input type="checkbox" class="form-check-input"/>
+          <input type="checkbox" id="terms" name="terms" class="form-check-input"/>
           <span class="form-check-label">Agree the <a href="./terms-of-service.html" tabindex="-1">terms and policy</a>.</span>
         </label>
       </div>
@@ -38,7 +38,6 @@
     Already have account? <a href="login" tabindex="-1">Login</a>
   </div>
 </div>
-
 <%- contentFor('modalValidate') %>
 <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
@@ -71,15 +70,40 @@
     e.preventDefault();
     validate();
   });
+  function activeModal(text) {
+    $('.text-warning').text(text);
+    $('#modal-report').modal('show');
+  }
   function validate() {
+    //Get value field input
+    const name = $("#name").val();
     const email = $("#email").val();
+    const password = $("#password").val();
+    const terms = $("#terms").is(':checked');
+
+    //Expression regexp validate
+    const regexName = /(?=.{1,})/;
+    const regexEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexPassword = /(?=.{8,})/;
+    //Check validate
+    if (!regexName.test(name)) {
+      return activeModal('The name cannot be left blank');
+    }
+    if (!regexEmail.test(email)) {
+      return activeModal('Incorrect email format');
+    }
+    if (!regexPassword.test(password)) {
+      return activeModal('The password must be eight characters or longer');
+    }
+    if(!terms) {
+      return activeModal('Please agree to the terms and policy');
+    }
     $.getJSON(`/register/is-available?email=${email}`, function (data) {
       console.log(data);
       if (data === true) {
         $("#formRegister").off("submit").submit();
       } else {
-        $('.text-warning').text('Email already exists, please try again with another email');
-        $('#modal-report').modal('show');
+        activeModal('Email already exists, please try again with another email');
       }
     });
   }

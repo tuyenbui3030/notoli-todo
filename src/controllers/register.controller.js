@@ -6,6 +6,7 @@ module.exports = {
   index: (req, res) => {
     res.render("register/index", {
       layout: "../views/layouts/accountLayout.ejs",
+      title: "Register",
     });
   },
   submit: async (req, res) => {
