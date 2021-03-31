@@ -1,6 +1,6 @@
 <div class="container-tight py-6">
   <div class="text-center mb-4">
-    <a href="."><img src="./static/logo-main.svg" height="36" alt=""></a>
+    <a href="."><img src="/public/static/logo-main.svg" height="36" alt=""></a>
   </div>
   <form class="card card-md" action="" name="formRegister" id="formRegister" method="POST">
     <div class="card-body">
@@ -30,6 +30,7 @@
         </label>
       </div>
       <div class="form-footer">
+        
         <button type="submit" class="btn btn-primary w-100">Create new account</button>
       </div>
     </div>
@@ -98,12 +99,17 @@
     if(!terms) {
       return activeModal('Please agree to the terms and policy');
     }
-    $.getJSON(`/register/is-available?email=${email}`, function (data) {
-      console.log(data);
-      if (data === true) {
-        $("#formRegister").off("submit").submit();
-      } else {
-        activeModal('Email already exists, please try again with another email');
+    $.ajax({
+      method: "POST",
+      dataType: "JSON",
+      url: `/register/is-available?email=${email}`,
+      success: (res) => {
+        console.log(res);
+        if (res === true) {
+          $("#formRegister").off("submit").submit();
+        } else {
+          activeModal('Email already exists, please try again with another email');
+        }
       }
     });
   }

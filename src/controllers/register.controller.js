@@ -26,6 +26,7 @@ module.exports = {
     res.render("register/success", {
       layout: "../views/layouts/accountLayout.ejs",
       email: result.email,
+      title: "Register",
     });
   },
   available: async (req, res) => {

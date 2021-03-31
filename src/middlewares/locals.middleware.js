@@ -1,7 +1,7 @@
 module.exports = function (app) {
   //Start - middleware - nav thông tin đăng nhập
   app.use(function (req, res, next) {
-    if (req.session.isAuthenticated === null) {
+    if (req.session.isAuthenticated === undefined) {
       req.session.isAuthenticated = false;
     }
     res.locals.lcIsAuthenticated = req.session.isAuthenticated;

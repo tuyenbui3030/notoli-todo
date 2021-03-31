@@ -26,6 +26,11 @@ module.exports = {
       note: {
         type: Sequelize.TEXT,
       },
+      status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: {

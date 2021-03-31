@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get("/", registerController.index);
 router.post("/", registerController.submit);
-router.get("/is-available", registerController.available);
+router.post("/is-available", registerController.available);
 
 module.exports = router;
