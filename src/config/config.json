@@ -14,6 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
+    "use_env_variable":"DATABASE_URL",
+    "dialect": "postgres"
+  },
+  "production2": {
     "username": "root",
     "password": null,
     "database": "database_production",
