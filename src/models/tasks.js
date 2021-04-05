@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ users, steps }) {
       // define association here
       this.belongsTo(users, { foreignKey: "userId", as: "users" });
-      this.hasMany(steps, { foreignKey: "taskId", as: "steps" });
+      this.hasMany(steps, {
+        foreignKey: "taskId",
+        as: "steps",
+        onDelete: "cascade",
+      });
     }
   }
   tasks.init(
