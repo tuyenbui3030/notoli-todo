@@ -45,6 +45,7 @@
                 <div class="input-group mb-2 update-step">
                   <a class="input-group-text">
                     <label class="form-switch">
+                      <input type="hidden" class="stepId" name="stepId[]" value="-1">
                       <input class="form-check-input ult-ckb" value="" name="stepStatus[]" type="checkbox">
                       <input class="ult-ckb-backup" type="hidden" value="false" name="stepStatus[]">
                     </label>
@@ -56,6 +57,8 @@
                   </a>
                 </div>
               <% } %>
+              <select id="listDel" name="listDel[]" multiple>
+              </select>
             </div>
             <a href="#" id="updateStep">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>

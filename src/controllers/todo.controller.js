@@ -124,12 +124,12 @@ module.exports = {
     const stepStatus = req.body.stepStatus;
     const stepId = req.body.stepId;
     const stepContent = req.body.stepUpdate;
+    const stepDel = req.body.listDel;
     console.log(stepStatus);
     console.log(stepId);
     console.log(stepContent);
     const sizeStep = stepContent.length;
     for (var i = 0; i < sizeStep; i++) {
-      console.log(i);
       if (stepContent[i].length > 0) {
         const updateStep = await steps.findByPk(stepId[i]);
         if (updateStep) {
@@ -139,13 +139,25 @@ module.exports = {
           updateStep.status = stepStatus[i];
           updateStep.save();
         } else {
-          console.log("dmm");
           const obj = {
             content: stepContent[i],
             status: stepStatus[i],
             taskId: req.body.taskId,
           };
           await steps.create(obj);
+        }
+      }
+    }
+    if (stepDel != undefined) {
+      const sizeDel = stepDel.length;
+      for (var i = 0; i < sizeDel; i++) {
+        const death = await steps.findByPk(stepDel[i]);
+        if (death) {
+          await steps.destroy({
+            where: {
+              id: stepDel[i],
+            },
+          });
         }
       }
     }
