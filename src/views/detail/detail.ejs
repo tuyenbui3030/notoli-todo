@@ -29,9 +29,9 @@
               <div class="input-group mb-2 update-step">
                 <a class="input-group-text">
                   <label class="form-switch">
-                    <input type="hidden" name="stepId[]" value="<%= step.id %>">
+                    <input type="hidden" class="stepId" name="stepId[]" value="<%= step.id %>">
                     <input class="form-check-input ult-ckb" value="<%= step.status?step.status:'false' %>" name="stepStatus[]" type="checkbox" <%= step.status ? 'checked' : '' %>>
-                    <input class="ult-ckb-backup" type="hidden" value="<%= step.status?step.status:'false' %>" name="stepStatus[]" <%= step.status?'disabled':'' %>>
+                    <input class="ult-ckb-backup" type="hidden" value="false" name="stepStatus[]" <%= step.status?'disabled':'' %>>
                   </label>
                 </a>
                 <input type="text" class="form-control" name="stepUpdate[]" autocomplete="off" placeholder="Add a step" value="<%= step.content %>" >

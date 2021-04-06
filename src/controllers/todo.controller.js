@@ -102,8 +102,10 @@ module.exports = {
           model: steps,
           as: "steps",
           required: false,
+          order: [["id", "ASC"]],
         },
       ],
+      order: [["steps", "id", "ASC"]],
     });
     const task = JSON.parse(JSON.stringify(list));
     res.render("detail/detail", { layout: false, task, moment });
@@ -119,19 +121,31 @@ module.exports = {
         taskId: req.body.taskId,
       },
     });
-    const sizeStep = listStep.length;
     const stepStatus = req.body.stepStatus;
     const stepId = req.body.stepId;
     const stepContent = req.body.stepUpdate;
+    console.log(stepStatus);
+    console.log(stepId);
+    console.log(stepContent);
+    const sizeStep = stepContent.length;
     for (var i = 0; i < sizeStep; i++) {
+      console.log(i);
       if (stepContent[i].length > 0) {
-        const updateStep = await steps.findByPk(stepId[0]);
+        const updateStep = await steps.findByPk(stepId[i]);
         if (updateStep) {
+          console.log(stepStatus[i]);
+          console.log(stepContent[i]);
           updateStep.content = stepContent[i];
           updateStep.status = stepStatus[i];
           updateStep.save();
         } else {
           console.log("dmm");
+          const obj = {
+            content: stepContent[i],
+            status: stepStatus[i],
+            taskId: req.body.taskId,
+          };
+          await steps.create(obj);
         }
       }
     }
