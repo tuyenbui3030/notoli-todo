@@ -29,19 +29,22 @@
     <div class="col-md-12 col-lg-12">
       <div class="card" style="height: calc(24rem + 10px)">
         <div class="card-header">
-          <h3 class="card-title">Tasks</h3>
+          <h3 class="card-title">Tasks<%= checkPage %></h3>
         </div>
         <div class="card-body-scrollable card-body-scrollable-shadow">
           <div class="table-responsive">
             <table class="table card-table table-vcenter" id="taskList">
             <% todos.forEach(function(todo) { %>
-              <% if (todo.status === false) { %>
               <tr>
                 <td class="w-1 pe-0">
-                  <input type="checkbox" class="form-check-input m-0 align-middle" id="status" aria-label="Select task" value="<%= todo.id %>" >
+                  <input type="checkbox" class="form-check-input m-0 align-middle" id="status" aria-label="Select task" value="<%= todo.id %>" <%= todo.status?"checked":"" %> >
                 </td>
                 <td class="w-100">
-                  <a href="#" class="text-reset open-modal" data-value="<%= todo.id %>"><%= todo.name %></a>
+                  <% if(checkPage === "/completed") { %>
+                    <del><a href="#" class="text-reset" data-value="<%= todo.id %>"><%= todo.name %></a><del>
+                  <% } else { %> 
+                    <a href="#" class="text-reset open-modal" data-value="<%= todo.id %>"><%= todo.name %></a>
+                  <%} %>
                   <!-- <a href="#" class="text-reset" data-bs-toggle="modal" data-bs-target="#modal-update"><%= todo.name %></a> -->
                 </td>
                 <td class="text-nowrap text-muted">
@@ -76,7 +79,6 @@
                   </a>
                 </td>
               </tr>
-              <% } %>
             <% }); %>
             </table>
           </div>
@@ -97,14 +99,14 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="" method="post">
+      <form action="/?retUrl=<%= checkPage %>" method="post">
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="13" y1="20" x2="20" y2="13" /><path d="M13 20v-6a1 1 0 0 1 1 -1h6v-7a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7" /></svg>
               Add a task
             </label>
-            <input type="text" class="form-control" name="name" id="name" placeholder="New a task">
+            <input type="text" class="form-control" name="name" id="name" required placeholder="New a task">
           </div>
           <div class="mb-3">
             <label class="form-label">
@@ -158,7 +160,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><circle cx="18" cy="18" r="4" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /><path d="M18 16.496v1.504l1 1" /></svg>
                   Add due date
                 </label>
-                <input type="date" name="dueDate" class="form-control">
+                <input type="text" name="dueDate" class="form-control dueDate">
               </div>
             </div>
             <div class="col-lg-12">
@@ -266,7 +268,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><circle cx="18" cy="18" r="4" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /><path d="M18 16.496v1.504l1 1" /></svg>
                   Add due date
                 </label>
-                <input type="date" name="dueDateUpdate" class="form-control">
+                <input type="text" name="dueDateUpdate" class="form-control dueDate">
               </div>
             </div>
             <div class="col-lg-12">
@@ -296,6 +298,11 @@
 </div>
 <%- contentFor() %>
 <script>
+  $('.dueDate').datetimepicker({
+      format: 'd/m/Y',
+      timepicker: false,
+      mask: true,
+    });
   $(document).on("click", "#newTask", () => 
     $(".input-step")
       .clone()
@@ -304,16 +311,7 @@
       .closest('.input-step')
       .first()
       .appendTo("#group-step")
-  ); 
-  // $(document).on("click", ".add-step", () => 
-  //   $(".input-step")
-  //     .clone()
-  //     .find('.form-control')
-  //     .val('')
-  //     .closest('.input-step')
-  //     .first()
-  //     .appendTo("#group-step")
-  // ); 
+  );
   $('#group-step').on("click", ".del-step", function(){
     const qtyInput = $(".input-step").clone().length;
     if(qtyInput > 1) {
@@ -340,6 +338,7 @@
   $("#taskList").on("change", "#important:checkbox", (function() {
     const important= $(this).is(':checked');
     const taskId = $(this).val();
+    const thisObj = $(this);
     if(important) {
       $(this).closest('.form-selectgroup-item').find('.form-selectgroup-label').addClass('text-yellow border-warning');
     } else {
@@ -353,7 +352,10 @@
         taskId,
       },
       success: function (res) {
-          console.log(res);
+        if("<%= checkPage %>" === "/important") {
+          thisObj.closest('tr').remove();
+        }
+        console.log(res);
       },
     });    
   }));
@@ -396,6 +398,23 @@
 
 
   // Detailll
+
+  $(document).on("click", ".open-modal", function(){
+    const taskId = $(this).data("value");
+    $.ajax({
+      url: "/todo/detail",
+      method: "POST",
+      data: {
+        taskId,
+      },
+      success: function (res) {
+        $("#modal-update").replaceWith(res);
+        $("#modal-update").modal('show');
+        $("#listDel").hide();
+      },
+    });
+  });
+  //Send value not checked
   $(document).on("click", "#updateStep", () => {
     $(".update-step")
       .clone()
@@ -424,23 +443,27 @@
     $('#listDel').append(`<option selected="selected" value="${optionValue}"></option>`);
     if(qtyInput > 1) {
       $(this).closest('.update-step').remove();
+    } else {
+      $(this).closest('.update-step')
+      .find('.form-control')
+      .val('')
+      .closest('.update-step')
+      .find('.ult-ckb')
+      .val('false')
+      .closest('.update-step')
+      .find('.stepId')
+      .val('-1')
+      .closest('.update-step')
+      .find('.ult-ckb-backup')
+      .prop('disabled', false)
+      .val('false')
+      .closest('.update-step')
+      .find('.form-check-input')
+      .prop('checked', false)
+      .closest('.update-step')
     }
   });
-  // $(document).on("click", ".open-modal", function(){
-  //   const taskId = $(this).data("value");
-  //   $.ajax({
-  //     url: "/todo/detail",
-  //     method: "POST",
-  //     data: {
-  //       taskId,
-  //     },
-  //     success: function (res) {
-  //       $("#modal-update").replaceWith(res);
-  //       $("#modal-update").modal('show');
-  //       $("#listDel").hide();
-  //     },
-  //   });
-  // });
+
   //Send value not checked
   $(document).on("click", ".ult-ckb", function() {
     if($(this).is(':checked')) {

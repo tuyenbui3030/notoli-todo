@@ -6,9 +6,13 @@ moment.updateLocale(moment.locale(), {
 });
 module.exports = {
   index: async (req, res) => {
+    const checkPage = req.originalUrl;
     user = req.session.authUser;
     const list = await tasks.findAll({
-      where: { userId: user.id },
+      where: {
+        userId: user.id,
+        status: false,
+      },
       attributes: {
         include: [
           [
@@ -34,14 +38,16 @@ module.exports = {
       ],
     });
     const todos = JSON.parse(JSON.stringify(list));
-    res.render("home/index", { title: "Dashboard", todos, moment });
+    res.render("home/index", { title: "Dashboard", todos, checkPage, moment });
   },
   create: async (req, res) => {
-    const name = xss(req.body.name);
+    const name = xss(req.body.name || "No name");
     const listStep = req.body.steps;
     const myDay = req.body.myDay ? true : false;
     const important = req.body.important ? true : false;
-    const dueDate = xss(req.body.dueDate);
+    const dueDate = xss(
+      moment(req.body.dueDate, "DD/MM/YYYY").format("YYYY-MM-DD")
+    );
     const note = xss(req.body.note);
     const obj = {
       name,
@@ -64,7 +70,9 @@ module.exports = {
         await steps.create(obj);
       }
     });
-    res.redirect("/");
+    const url = req.query.retUrl || "/";
+    res.redirect(url);
+    // res.redirect(req.originalUrl);
   },
   status: async (req, res) => {
     const task = await tasks.findByPk(req.body.taskId);
@@ -113,8 +121,21 @@ module.exports = {
   update: async (req, res) => {
     console.log(req.body);
     const task = await tasks.findByPk(req.body.taskId);
-    task.name = req.body.nameUpdate;
+    task.name = req.body.nameUpdate || "No name";
     task.dueDate = req.body.dueDateUpdate;
+    task.note = req.body.noteUpdate;
+    const importantUpdate = req.body.importantUpdate || false;
+    const myDay = req.body.myDayUpdate || false;
+    task.dueDate = moment(req.body.dueDateUpdate, "DD/MM/YYYY").format(
+      "YYYY-MM-DD"
+    );
+    console.log(
+      moment(req.body.dueDateUpdate, "DD/MM/YYYY").format("YYYY-MM-DD")
+    );
+    task.important = importantUpdate;
+    task.myDay = myDay;
+
+    console.log("KQ: ", req.body.myDayUpdate);
     task.save();
     const listStep = await steps.findAll({
       where: {
@@ -161,6 +182,7 @@ module.exports = {
         }
       }
     }
+
     res.redirect("/");
   },
 };

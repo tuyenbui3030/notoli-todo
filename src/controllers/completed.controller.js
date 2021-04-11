@@ -11,8 +11,7 @@ module.exports = {
     const list = await tasks.findAll({
       where: {
         userId: user.id,
-        important: true,
-        status: false,
+        status: true,
       },
       attributes: {
         include: [

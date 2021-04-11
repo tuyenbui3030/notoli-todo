@@ -54,6 +54,8 @@ app.get("/test", restrict, async (req, res) => {
 });
 app.use("/", require("./routes/todo.route"));
 app.use("/important", require("./routes/important.route"));
+app.use("/completed", require("./routes/completed.route"));
+app.use("/myday", require("./routes/myday.route"));
 app.use("/register", require("./routes/register.route"));
 app.use("/login", require("./routes/login.router"));
 app.use("/logout", require("./routes/logout.route"));
