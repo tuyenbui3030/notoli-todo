@@ -41,29 +41,20 @@ module.exports = {
       },
     });
 
-    // await transporter
-    //   .sendMail({
-    //     from: "notolistore@gmail.com",
-    //     to: req.body.email,
-    //     subject: "Verify Account",
-    //     text: "Click Here to verify",
-    //     html: `<p>Click <a href="${domain}/register/verify?token=${token}"> Here</a> to verify</p>`,
-    //   })
-    //   .then(console.log)
-    //   .catch(console.error);
-    const test = await transporter.sendMail({
-      from: "notolistore@gmail.com",
-      to: req.body.email,
-      subject: "Verify Account",
-      text: "Click Here to verify",
-      html: `<p>Click <a href="${domain}/register/verify?token=${token}"> Here</a> to verify</p>`,
-    });
-    const objTest = JSON.stringify(test);
+    await transporter
+      .sendMail({
+        from: "notolistore@gmail.com",
+        to: req.body.email,
+        subject: "Verify Account",
+        text: "Click Here to verify",
+        html: `<p>Click <a href="${domain}/register/verify?token=${token}"> Here</a> to verify</p>`,
+      })
+      .then(console.log)
+      .catch(console.error);
     res.render("register/success", {
       layout: "../views/layouts/accountLayout.ejs",
       email: result.email,
       title: "Register",
-      objTest,
     });
   },
   available: async (req, res) => {
