@@ -1,9 +1,9 @@
 <div class="navbar-expand-md">
   <div class="collapse navbar-collapse" id="navbar-menu">
     <div class="navbar navbar-light">
-      <div class="container-xl">
+      <div class="container-xl" id="dynav">
         <ul class="navbar-nav">
-          <li class="nav-item <%= checkPage === " /" ? "active" : "" %> ">
+          <li class="nav-item <%= checkPage === "/" ? "active" : "" %> ">
             <a class="nav-link" href="/">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -19,9 +19,12 @@
               <span class="nav-link-title">
                 Tasks
               </span>
+              <% if (countTask > 0) { %>
+                <span class="badge badge-pill bg-primary"><%= countTask %></span>
+              <% } %>
             </a>
           </li>
-          <li class="nav-item <%= checkPage === " /completed" ? "active" : "" %> ">
+          <li class="nav-item <%= checkPage === "/completed" ? "active" : "" %> ">
             <a class="nav-link" href="/completed">
               <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg"
                   class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -36,7 +39,7 @@
               </span>
             </a>
           </li>
-          <li class="nav-item <%= checkPage === " /important" ? "active" : "" %> ">
+          <li class="nav-item <%= checkPage === "/important" ? "active" : "" %> ">
             <a class="nav-link" href="/important">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -49,6 +52,9 @@
               <span class="nav-link-title">
                 Important
               </span>
+              <% if (countImportant > 0) { %>
+                <span class="badge badge-pill bg-primary"><%= countImportant %></span>
+              <% } %>
             </a>
           </li>
           <li class="nav-item <%= checkPage === " /myday" ? "active" : "" %> ">
@@ -62,9 +68,12 @@
                   </path>
                 </svg>
               </span>
-              <span class="nav-link-title">
+              <span class="nav-link-title mr-2">
                 My day
               </span>
+              <% if (countMyday > 0) { %>
+                <span class="badge badge-pill bg-primary"><%= countMyday %></span>
+              <% } %>
             </a>
           </li>
         </ul>

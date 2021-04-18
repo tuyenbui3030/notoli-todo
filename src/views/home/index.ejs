@@ -67,7 +67,7 @@
                 </td>
                 <td>
                   <label class="form-selectgroup-item">
-                    <input type="checkbox" id="myday" class="form-selectgroup-input" aria-label="Select task" value="<%= todo.id %>" <%= todo.myDay ? "checked":"" %>>
+                    <input type="checkbox" id="myday" class="form-selectgroup-input checkmyday" aria-label="Select task" value="<%= todo.id %>" <%= todo.myDay ? "checked":"" %>>
                     <span class="form-selectgroup-label <%= todo.myDay ? 'text-yellow border-warning':'' %>">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="4"></circle><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path></svg>
                     </span>
@@ -331,9 +331,17 @@
         taskId,
       },
       success: function (res) {
-          thisObj.closest('tr').remove();
+        thisObj.closest('tr').remove();
+        const retUrl = window.location.pathname;
+        $.ajax({
+          url: `/components/dynav?retUrl=${retUrl}`,
+          method: "POST",
+          success: function (res) {
+            $("#dynav").replaceWith(res);
+          },
+        });
       },
-    });    
+    });
   })); 
   $("#taskList").on("change", "#important:checkbox", (function() {
     const important= $(this).is(':checked');
@@ -355,9 +363,16 @@
         if("<%= checkPage %>" === "/important") {
           thisObj.closest('tr').remove();
         }
-        console.log(res);
+        const retUrl = window.location.pathname;
+        $.ajax({
+          url: `/components/dynav?retUrl=${retUrl}`,
+          method: "POST",
+          success: function (res) {
+            $("#dynav").replaceWith(res);
+          },
+        });
       },
-    });    
+    });
   }));
   $("#taskList").on("change", "#myday:checkbox", (function() {
     const myday= $(this).is(':checked');
@@ -375,7 +390,14 @@
         taskId,
       },
       success: function (res) {
-          console.log(res);
+        const retUrl = window.location.pathname;
+        $.ajax({
+          url: `/components/dynav?retUrl=${retUrl}`,
+          method: "POST",
+          success: function (res) {
+            $("#dynav").replaceWith(res);
+          },
+        });
       },
     });
   }));
@@ -389,8 +411,15 @@
         taskId,
       },
       success: function (res) {
-        console.log(res);
         objTask.closest('tr').remove();
+        const retUrl = window.location.pathname;
+        $.ajax({
+          url: `/components/dynav?retUrl=${retUrl}`,
+          method: "POST",
+          success: function (res) {
+            $("#dynav").replaceWith(res);
+          },
+        });
       },
     });
   });
@@ -481,4 +510,17 @@
     }
     console.log($(this).val());
   });
+
+
+  // $("#taskList").on("click", ".checkmyday", (function() {
+  //   const retUrl = window.location.pathname;
+  //   $.ajax({
+  //     url: `/components/dynav?retUrl=${retUrl}`,
+  //     method: "POST",
+  //     success: function (res) {
+  //       $("#dynav").replaceWith(res);
+  //       // console.log(res);
+  //     },
+  //   });
+  // })); 
 </script>

@@ -37,21 +37,6 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 require("./middlewares/locals.middleware")(app);
 
-app.get("/test", restrict, async (req, res) => {
-  const list = await tasks.findOne({
-    where: { id: 9 },
-    include: [
-      {
-        model: steps,
-        as: "steps",
-        required: false,
-      },
-    ],
-  });
-  const task = JSON.parse(JSON.stringify(list));
-
-  res.json(task.steps[0]);
-});
 app.use("/", require("./routes/todo.route"));
 app.use("/important", require("./routes/important.route"));
 app.use("/completed", require("./routes/completed.route"));
@@ -59,6 +44,7 @@ app.use("/myday", require("./routes/myday.route"));
 app.use("/register", require("./routes/register.route"));
 app.use("/login", require("./routes/login.router"));
 app.use("/logout", require("./routes/logout.route"));
+app.use("/components", require("./routes/components.route"));
 
 app.use(function (req, res) {
   res.render("404", { layout: false });
@@ -72,6 +58,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
   console.log(`Server is running at http://localhost:${PORT}`);
   await sequelize.authenticate();
-  await sequelize.sync();
+  // await sequelize.sync();
   console.log("Database synced!");
 });
