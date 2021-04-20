@@ -45,6 +45,7 @@ app.use("/register", require("./routes/register.route"));
 app.use("/login", require("./routes/login.router"));
 app.use("/logout", require("./routes/logout.route"));
 app.use("/components", require("./routes/components.route"));
+app.use("/profile", require("./routes/profile.route"));
 
 app.use(function (req, res) {
   res.render("404", { layout: false });

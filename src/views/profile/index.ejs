@@ -1,0 +1,112 @@
+
+<div class="container-xl">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <div class="card card-lg">
+        <div class="card-body markdown">
+            <div class="card-body">
+              <form method="POST" enctype="multipart/form-data">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">My Profile</h3>
+                    <i class="fa fa-car" aria-hidden="true"></i>
+                  </div>
+                  <!-- <span class="avatar avatar-xl" style="background-image: url(demo/faces/female/9.jpg)"></span> -->
+                  <div class="card-body ">
+                    <div class="avatar-wrapper">
+                      <img class="profile-pic" src="../../public/static/avatars/<%= lcAuthUser.avatar %>"/>
+                      <div class="upload-button">
+                      </div>
+                      <input class="file-upload" name="fuMain" type="file" accept="image/*" />
+                    </div>
+                    <div class="row">
+                      <div class="mb-3">
+                        <label class="form-label">Email-Address</label>
+                        <input class="form-control" placeholder="your-email@domain.com" value="<%= lcAuthUser.email %>" disabled>
+                      </div>  
+                      <div class="mb-1">
+                        <label class="form-label">Full name</label>
+                        <input class="form-control" name="name" placeholder="Full name" value="<%= lcAuthUser.name %>" required>
+                      </div>
+                    </div>
+                  </div>      
+                </div>
+                <button class="btn btn-primary btn-block mt-3" type="submit">Save</button>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- contentFor('style') %>
+<style>
+  .avatar-wrapper {
+    position: relative;
+    height: 150px;
+    width: 150px;
+    margin: 10px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 1px 1px 15px -5px black;
+    transition: all 0.3s ease;
+  }
+  .avatar-wrapper:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  .avatar-wrapper:hover .profile-pic {
+    opacity: 0.9;
+  }
+  .avatar-wrapper .profile-pic {
+    height: 100%;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  .avatar-wrapper .profile-pic:after {
+    content: "";
+    top: 0;
+    left: 0;
+    background: #ecf0f1 url("../../public/static/avatars/user.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 190px;
+    text-align: center;
+  }
+  .avatar-wrapper .upload-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+<%- contentFor() %>
+
+<script>
+$(document).ready(function() {	
+  var readURL = function(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              $('.profile-pic').attr('src', e.target.result);
+          }
+  
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+ 
+  $(".file-upload").on('change', function(){
+      readURL(this);
+  });
+  
+  $(".upload-button").on('click', function() {
+     $(".file-upload").click();
+  });
+});
+</script>
