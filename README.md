@@ -1,1 +1,1 @@
-Todo App - NodeJS - ExpressJS - PostgreSQL
+Todo App - NodeJS - ExpressJS - PostgreSQL - MVC - AJAX - jQuery
